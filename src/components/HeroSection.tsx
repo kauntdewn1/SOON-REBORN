@@ -169,7 +169,7 @@ export default function HeroSection() {
         </motion.p>
 
         <motion.div 
-          className="relative group mt-10"
+          className="relative group mt-10 hidden md:block"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
@@ -184,7 +184,7 @@ export default function HeroSection() {
 
           <motion.a 
             href="https://app.convertkit.com/forms/5ed24b54bc/view"
-            className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2 inline-block px-6 py-3 bg-[#DC0000] text-white text-xs tracking-widest rounded shadow-lg font-mono hover:bg-[#DC0000]/90"
+            className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 inline-block px-6 py-3 bg-[#DC0000] text-white text-xs tracking-widest rounded shadow-lg font-mono hover:bg-[#DC0000]/90"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
