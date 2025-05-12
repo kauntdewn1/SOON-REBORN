@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -15,6 +15,13 @@ const geistMono = Geist_Mono({
   display: "swap",
   preload: true,
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#000000",
+};
 
 export const metadata: Metadata = {
   title: "FLOW//REBORN",
@@ -39,12 +46,6 @@ export const metadata: Metadata = {
     },
     shortcut: "https://res.cloudinary.com/dgyocpguk/image/upload/v1746323807/favicon_pvncfw.png",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
-  themeColor: "#000000",
 };
 
 export default function RootLayout({
