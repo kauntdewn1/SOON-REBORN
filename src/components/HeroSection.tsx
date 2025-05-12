@@ -183,7 +183,7 @@ export default function HeroSection() {
           </motion.div>
 
           <motion.a 
-            href="https://app.convertkit.com/forms/5ed24b54bc/view"
+            href="https://app.convertkit.com/forms/5ed24b54bc"
             className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 inline-block px-6 py-3 bg-[#DC0000] text-white text-xs tracking-widest rounded shadow-lg font-mono hover:bg-[#DC0000]/90"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400 }}
