@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import FormConvertKit from './ConvertKitForm';
+import Countdown from './Countdown';
 
 const glowVariants = {
   initial: {
@@ -80,13 +80,13 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <motion.section 
+    <motion.section
       className="relative py-16 text-center h-[80vh] overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-    >
-      <motion.div 
+      >
+      <motion.div
         className="absolute inset-0 -z-10"
         initial={{ scale: 1.2, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.9 }}
@@ -147,6 +147,7 @@ export default function HeroSection() {
           )}
         </AnimatePresence>
       </motion.div>
+
       <motion.div
         className="relative max-w-4xl mx-auto px-4"
         initial={{ y: 30, opacity: 0 }}
@@ -158,7 +159,9 @@ export default function HeroSection() {
           stiffness: 100
         }}
       >
+
         <motion.p 
+
           className="text-lg md:text-xl text-white font-mono tracking-wider leading-relaxed"
           variants={textGlowVariants}
           initial="initial"
@@ -167,39 +170,8 @@ export default function HeroSection() {
           <span className="text-[#DC0000] font-bold">O bunker dos sobreviventes</span> que reconheceram suas dívidas e se juntarão para{' '}
           <span className="text-[#DC0000] font-bold">virar o jogo</span> contra o sistema e todos que provocaram isso.
         </motion.p>
-
-        <motion.div 
-          className="relative group mt-10 hidden md:block"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-        >
-          <motion.div 
-            className="text-[#DC0000] cursor-pointer text-sm tracking-widest font-mono"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            ⬤ CAMADA BLOQUEADA
-          </motion.div>
-
-          <motion.a 
-            href="https://app.convertkit.com/forms/5ed24b54bc"
-            className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 inline-block px-6 py-3 bg-[#DC0000] text-white text-xs tracking-widest rounded shadow-lg font-mono hover:bg-[#DC0000]/90"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            RECEBER ACESSO ANTECIPADO
-          </motion.a>
-        </motion.div>
-
-        {mounted && <FormConvertKit />}
       </motion.div>
-      <motion.div
-        className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/70 to-transparent"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-      />
+      <Countdown targetDate="2025-06-01T12:00:00Z" className="mt-8" />
     </motion.section>
   );
 }

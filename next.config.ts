@@ -3,7 +3,6 @@ import type { Configuration } from 'webpack';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['res.cloudinary.com'],
     remotePatterns: [
       {
         protocol: 'https',
