@@ -12,65 +12,86 @@ const FirebaseLeadForm: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
 
+  // FUNÇÃO handleDebtValueChange
+  const handleDebtValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+
+    // Remove tudo que não for dígito, ponto ou vírgula
+    value = value.replace(/[^0-9.,]/g, '');
+
+    // Permite apenas uma vírgula ou um ponto como separador decimal
+    value = value.replace(/[,.]+/g, (match, offset, original) => {
+      // Se for o primeiro ponto ou vírgula, mantém. Caso contrário, remove.
+      return original.indexOf(match) === offset ? match : '';
+    });
+
+    // Se a vírgula vier antes do ponto, substitui ponto por vírgula
+    if (value.indexOf(',') !== -1 && value.indexOf('.') !== -1) {
+      if (value.indexOf(',') < value.indexOf('.')) {
+        value = value.replace(/\./g, '');
+      } else {
+        value = value.replace(/,/g, '');
+      }
+    }
+    value = value.replace(/\./g, ','); // Garante vírgula como separador decimal
+
+    // Adiciona separador de milhar (opcional, mas melhora a visualização)
+    const parts = value.split(',');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    value = parts.join(',');
+
+    // Formata como moeda BRL
+    // Primeiro, converte para número para formatar corretamente
+    const numberValue = parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    if (!isNaN(numberValue)) {
+      const formatter = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+
+      setDebtValue(formatter.format(numberValue));
+    } else {
+      setDebtValue(value ? `R$ ${value}` : '');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setMessage('');
 
     try {
-      const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setSubmitting(true);
-        setMessage('');
-    
-        try {
-          // Limpa e converte o valor da dívida formatado para número
-          const cleanedDebtValue = debtValue.replace(/[R$\s.]/g, '').replace(',', '.');
-          const numericDebtValue = parseFloat(cleanedDebtValue);
-    
-          // Verifica se a conversão foi bem-sucedida (opcional, mas recomendado)
-          if (isNaN(numericDebtValue)) {
-              setMessage('❌ Valor da dívida inválido.');
-              setSubmitting(false);
-              return; // Interrompe a submissão se o valor for inválido
-          }
-    
-    
-          await addDoc(collection(db, "leads"), {
-            name,
-            email,
-            whatsapp,
-            debtValue: numericDebtValue, // Salva o valor numérico
-            timestamp: new Date(),
-          });
-          setMessage('✅ Cadastro confirmado. Bem-vindo ao caos.');
-          setName('');
-          setEmail('');
-          setWhatsapp('');
-          setDebtValue(''); // Limpa o campo formatado
-        } catch (e) {
-          console.error("Erro ao salvar lead:", e);
-          setMessage('❌ Erro ao enviar. Tente novamente.');
-          // Não limpar campos aqui se quiser que o usuário veja o que digitou
-        } finally {
-          setSubmitting(false);
-        }
-      };    
+      // Limpa e converte o valor da dívida formatado para número
+      const cleanedDebtValue = debtValue.replace(/[R$\s.]/g, '').replace(',', '.');
+      const numericDebtValue = parseFloat(cleanedDebtValue);
+
+      // Verifica se a conversão foi bem-sucedida
+      if (isNaN(numericDebtValue)) {
+        setMessage('❌ Valor da dívida inválido.');
+        setSubmitting(false);
+        return; // Interrompe a submissão se o valor for inválido
+      }
+
       await addDoc(collection(db, "leads"), {
         name,
         email,
         whatsapp,
-        debtValue,
+        debtValue: numericDebtValue, // Salva o valor numérico
         timestamp: new Date(),
       });
+      
       setMessage('✅ Cadastro confirmado. Bem-vindo ao caos.');
       setName('');
       setEmail('');
+      setWhatsapp('');
+      setDebtValue(''); // Limpa o campo formatado
     } catch (e) {
       console.error("Erro ao salvar lead:", e);
       setMessage('❌ Erro ao enviar. Tente novamente.');
-      setWhatsapp('');
-      setDebtValue('');
+      // Não limpar campos aqui para o usuário ver o que digitou
     } finally {
       setSubmitting(false);
     }
@@ -141,10 +162,6 @@ const FirebaseLeadForm: React.FC = () => {
             placeholder="Ex: R$ 10.000,00"
           />
         </div>
-
-        {/* Note: Consider adding validation and potentially a number type input
-             for debtValue if appropriate, depending on how you plan to use this data.
-             For simplicity, keeping it as text for now based on instruction. */}
 
         <button
           type="submit"
