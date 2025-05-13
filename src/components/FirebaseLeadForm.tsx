@@ -18,6 +18,44 @@ const FirebaseLeadForm: React.FC = () => {
     setMessage('');
 
     try {
+      const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSubmitting(true);
+        setMessage('');
+    
+        try {
+          // Limpa e converte o valor da dívida formatado para número
+          const cleanedDebtValue = debtValue.replace(/[R$\s.]/g, '').replace(',', '.');
+          const numericDebtValue = parseFloat(cleanedDebtValue);
+    
+          // Verifica se a conversão foi bem-sucedida (opcional, mas recomendado)
+          if (isNaN(numericDebtValue)) {
+              setMessage('❌ Valor da dívida inválido.');
+              setSubmitting(false);
+              return; // Interrompe a submissão se o valor for inválido
+          }
+    
+    
+          await addDoc(collection(db, "leads"), {
+            name,
+            email,
+            whatsapp,
+            debtValue: numericDebtValue, // Salva o valor numérico
+            timestamp: new Date(),
+          });
+          setMessage('✅ Cadastro confirmado. Bem-vindo ao caos.');
+          setName('');
+          setEmail('');
+          setWhatsapp('');
+          setDebtValue(''); // Limpa o campo formatado
+        } catch (e) {
+          console.error("Erro ao salvar lead:", e);
+          setMessage('❌ Erro ao enviar. Tente novamente.');
+          // Não limpar campos aqui se quiser que o usuário veja o que digitou
+        } finally {
+          setSubmitting(false);
+        }
+      };    
       await addDoc(collection(db, "leads"), {
         name,
         email,
@@ -98,7 +136,7 @@ const FirebaseLeadForm: React.FC = () => {
             type="text"
             id="debtValue"
             value={debtValue}
-            onChange={(e) => setDebtValue(e.target.value)}
+            onChange={handleDebtValueChange}
             className="w-full px-4 py-2 bg-black border border-zinc-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-zinc-500"
             placeholder="Ex: R$ 10.000,00"
           />

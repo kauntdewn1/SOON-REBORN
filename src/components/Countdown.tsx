@@ -64,6 +64,8 @@ export default function Countdown({ targetDate, className }: CountdownProps) {
         };
       }
 
+      
+
       return {
         dias: Math.floor(difference / (1000 * 60 * 60 * 24)),
         horas: Math.floor((difference / (1000 * 60 * 60)) % 24),
