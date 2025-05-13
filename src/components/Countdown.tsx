@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 type CountdownProps = {
   targetDate: string;
+  className?: string;
 };
 
 type TimeLeft = {
@@ -33,7 +34,7 @@ const matrixVariants = {
   },
 };
 
-export default function Countdown({ targetDate }: CountdownProps) {
+export default function Countdown({ targetDate, className }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     dias: 0,
     horas: 0,
@@ -116,7 +117,7 @@ export default function Countdown({ targetDate }: CountdownProps) {
 
   return (
     <motion.div
-      className="text-white text-center mt-8 z-20 relative font-mono"
+      className={`text-white text-center mt-8 z-20 relative font-mono ${className}`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
@@ -148,4 +149,4 @@ export default function Countdown({ targetDate }: CountdownProps) {
       </div>
     </motion.div>
   );
-}
+  }
