@@ -1,8 +1,8 @@
-
 // Importe as funções que você precisa dos SDKs necessários
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth"; // Se você planeja usar Autenticação do Firebase
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 // Configuração do Firebase para seu aplicativo web
 // Para SDKs do Firebase para JS v7.20.0 e posteriores, measurementId é opcional
@@ -19,6 +19,14 @@ const firebaseConfig = {
 
   // Inicialize o Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+// Inicialize o App Check
+if (typeof window !== 'undefined') {
+    initializeAppCheck(app, {
+        provider: new ReCaptchaV3Provider('6LcXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'), // Substitua pela sua chave reCAPTCHA v3
+        isTokenAutoRefreshEnabled: true
+    });
+}
 
 // Exporte os serviços do Firebase
 const db = getFirestore(app);
